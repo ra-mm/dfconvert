@@ -3,7 +3,7 @@
 [![PyPI version](https://badge.fury.io/py/dfconvert.svg)](https://badge.fury.io/py/dfconvert)
 [![Build Status](https://travis-ci.org/dataflownb/dfconvert.svg?branch=beta-update)](https://travis-ci.org/dataflownb/dfconvert)
 
-This is a library allows the conversion of Dataflow notebooks into their IPykernel equivalents. There is no guarantee made that the Notebook that enters will be as efficient as the notebook in the Dfkernel but it will perform in the same way.
+This library allows the conversion of Dataflow notebooks into their IPykernel equivalents. There is no guarantee made that the Notebook that enters will be as efficient as the notebook in the Dfkernel but it will perform in the same way.
 
 A topological sort if also applied to the Notebook to ensure that it can be ran top down.
 
@@ -16,7 +16,7 @@ It relies on IPython core methods for some of the translation process so some ma
 
 
 ### Usage
-By installing the package, you will have a new option "Export as IPython Notebook" available in the toolbar interface.
+By installing the package, you will have a new option "Export as IPython Notebook" available in the toolbar interface of the Jupyter Notebook.
 
 Optionally the package can also be called by the use of
 ```
