@@ -1,4 +1,4 @@
-display_variable_cell = display_variable_cell = [{ "cell_type": "code", "execution_count": None, "id": "1", "metadata": {}, "outputs": [], "source":'''from IPython.display import display, HTML
+display_variable_cell = display_variable_cell = [{ "cell_type": "code", "id": "1" , "execution_count": None, "metadata": {}, "outputs": [], "source":'''from IPython.display import display, HTML
 import html
 def display_variables(variables):
     """

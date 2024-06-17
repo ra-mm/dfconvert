@@ -402,7 +402,6 @@ def transform_out_refs(csource,cast):
         if isinstance(node, ast.Subscript) and isinstance(node.value, ast.Name) and node.value.id == 'Out':
             start, end = node.first_token.startpos + offset, node.last_token.endpos + offset
             #new_id = re.sub('Out\[[\"|\']?([0-9A-Fa-f]{' + str(DEFAULT_ID_LENGTH) + '})[\"|\']?\]', r'Out_\1', csource[start:end])
-            #new_id = re.sub('Out\\[[\\"|\\']?([0-9A-Fa-f]{' + str(DEFAULT_ID_LENGTH) + '})[\\"|\\']?\\]', r'Out_\1', csource[start:end])
             new_id = re.sub(r'Out\[(?:["\']?)?([0-9A-Fa-f]{' + str(DEFAULT_ID_LENGTH) + r'})(?:["\']?)?\]', r'Out_\1', csource[start:end])
             csource = csource[:start] + new_id + csource[end:]
             ref_uuids.add(new_id[4:])
@@ -427,7 +426,8 @@ def transform_last_node(csource,cast,exec_count):
                     tuple_eles.append(ast.Name('Out_' + str(exec_count) + '['+str(idx)+']', ast.Store))
             if (named_flag):
                 nnode = ast.Assign([ast.Tuple(tuple_eles, ast.Store)], expr_val)
-                out_assign = 'Out_'+str(exec_count)+' = []\n' if out_exists else ''
+                tuple_content = astor.to_source(expr_val).strip()[1:-1]  # Remove first '(' and last ')'
+                out_assign = f'Out_{exec_count} = [{tuple_content}]\n' if out_exists else ''
                 ast.fix_missing_locations(nnode)
                 start,end = cast.tree.body[-1].first_token.startpos, cast.tree.body[-1].last_token.endpos
                 csource = csource[:start] + out_assign + astor.to_source(nnode) + csource[end:]
@@ -436,8 +436,6 @@ def transform_last_node(csource,cast,exec_count):
 def out_assign(csource,cast,exec_count,tags):
     #This is a special case where an a,3 type assignment happens
     tag_flag = bool([True if exec_count in (tag[:DEFAULT_ID_LENGTH] for tag in tags) else False].count(True))
-
-    print(tag_flag)
 
     if len(cast.tree.body) > 0 and isinstance(cast.tree.body[-1], ast.Expr) and isinstance(cast.tree.body[-1].value, ast.Call):
         return csource, []
